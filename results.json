@@ -1,0 +1,30 @@
+{
+  "question": "Can a gradient-boosting model on readability features plus text statistics beat a classical readability-formula regression at rating text difficulty on the public OneStopEnglish corpus?",
+  "method": "Stratified 80/20 split (seed 42). Baseline: linear regression on Flesch, Flesch-Kincaid, Gunning Fog and SMOG features. Improved: LightGBM on the same features plus extra statistics and SVD of TF-IDF, tuned by 5-fold CV on the training set. Predictions rounded to levels 0-2; test set used once.",
+  "dataset": {
+    "name": "OneStopEnglish corpus",
+    "source_url": "https://github.com/nishkalavallabhi/OneStopEnglishCorpus",
+    "n_rows": 756,
+    "n_train": 604,
+    "n_test": 152,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "quadratic weighted kappa (test)",
+  "higher_is_better": true,
+  "baseline": "Linear regression on classical readability formulas (Flesch Reading Ease, Flesch-Kincaid grade, Gunning Fog, SMOG-style); not the paper's BERT model.",
+  "improved": "LightGBM regressor on the formula features plus extra lexical and syntactic statistics and a 50-dim truncated-SVD projection of TF-IDF vectors; hyper-parameters chosen by 5-fold CV on the training set.",
+  "metrics": {
+    "baseline_score": 0.4,
+    "improved_score": 0.8444444444444444,
+    "baseline_score_std": 0.0,
+    "improved_score_std": 0.0,
+    "improvement": 0.4444444444444444,
+    "cv_best_qwk": 0.8111810823634216,
+    "baseline_mae": 0.39473684210526316,
+    "improved_mae": 0.13815789473684212,
+    "baseline_spearman": 0.6013593535317073,
+    "improved_spearman": 0.8426664566061371
+  },
+  "notes": "Stand-in dataset, not the paper's own. Articles appear at all three levels, and the split is stratified by level, not grouped by article, so related texts can fall on both sides. Only the LightGBM model is randomized; the baseline has no randomness, so its std is 0. Best CV params: {'learning_rate': 0.1, 'min_child_samples': 10, 'n_estimators': 400, 'num_leaves': 7}. Syllables are counted heuristically. Labels are treated as ordinal numbers. The test set is small, so differences are noisy. TF-IDF/SVD is fit on the training texts only, but inside CV it is not refit per fold."
+}
