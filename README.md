@@ -35,6 +35,27 @@ python analysis.py
 
 Results: written to `results.json` (a chart is saved to `figures/`).
 
+## Results (latest run)
+
+On the public OneStopEnglish corpus (152-text test set), a classical readability-formula linear regression reached quadratic weighted kappa 0.40, while a LightGBM model on formula features plus extra statistics and TF-IDF SVD reached 0.84, a gain from a single noisy split.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.4 |
+| improved_score | 0.8444 |
+| baseline_score_std | 0 |
+| improved_score_std | 0 |
+| improvement | 0.4444 |
+| cv_best_qwk | 0.8112 |
+| baseline_mae | 0.3947 |
+| improved_mae | 0.1382 |
+| baseline_spearman | 0.6014 |
+| improved_spearman | 0.8427 |
+
+Run on 2026-10-20. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Stand-in dataset, not the paper's own. Articles appear at all three levels, and the split is stratified by level, not grouped by article, so related texts can fall on both sides. Only the LightGBM model is randomized; the baseline has no randomness, so its std is 0. Best CV params: {'learning_rate': 0.1, 'min_child_samples': 10, 'n_estimators': 400, 'num_leaves': 7}. Syllables are counted heuristically. Labels are treated as ordinal numbers. The test set is small, so differences are noisy. TF-IDF/SVD is fit on the training texts only, but inside CV it is not refit per fold.
+
 ## Reference
 
 This project is motivated by the following paper:
